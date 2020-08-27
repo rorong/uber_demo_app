@@ -1,0 +1,36 @@
+
+<div id="route-location-admin" data-street-run="<%= @route_array.to_json %>"></div>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<div class ="row">
+  <div class="col-lg-12 col-sm-12 col-md-12">
+     <h3 class="pull-left">Welcome to Admin Home page</h3>
+    <%= link_to "Today's run", admin_index_path(todays_run: 'Today_Run'), class: "btn btn-primary pull-right todays_run" %>
+    <%= link_to "sign out", sign_out_path, class: "btn btn-primary", method: :delete %>
+  </div>
+</div>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['google_api_key'] %>&callback=initMap&libraries=&v=weekly"defer></script>
+
+<script>
+  function initMap() {
+    var options = {
+    center: {lat: -37.8136, lng: 144.9631},
+    zoom: 10
+  };
+  var map = new google.maps.Map(document.getElementById('map'), options);
+  var todays_run = "<%= params[:todays_run] %>"
+  if (todays_run == "Today_Run") {
+    let street_run_data = $("#route-location-admin").data('street-run');
+  	//let street_run_array = JSON.parse(street_run_data);
+    const polyline = new google.maps.Polyline({
+      path: street_run_data,
+      geodesic: true,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    polyline.setMap(map);
+  }
+}
+</script>
+
