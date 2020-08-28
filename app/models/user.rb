@@ -7,9 +7,9 @@ class User < ApplicationRecord
 	before_validation :generate_password, on: :create
 
 	def generate_password
-    if self.email.present?
-      self.temp_password = self.email
-      self.password = self.email
+		email = self.email
+    if email.present?
+      self.temp_password, self.password = email
     end
   end
 end
